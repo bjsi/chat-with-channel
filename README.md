@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img src="https://raw.githubusercontent.com/bjsi/ai-popper/main/img/ai-popper-logo.jpg" alt="AI Popper Logo" height="200">
+    <img src="https://raw.githubusercontent.com/bjsi/chat-with-channel/main/img/chat-with-channel.jpeg" alt="Chat with Channel Logo" height="200">
     <br/>
     Chat with Channel - 💬 Create Chatbots for any YouTube channel
 </h1>
