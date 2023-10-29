@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "exclude": ["packages/**/tests/**", "packages/**/dist/**"],
+  "references": [
+    {
+      "path": "./packages/shared-lib"
+    },
+    {
+      "path": "./packages/cli"
+    },
+    {
+      "path": "./packages/ui/server"
+    }
+  ]
+}
