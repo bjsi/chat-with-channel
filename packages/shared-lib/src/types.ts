@@ -1,15 +1,8 @@
 import { z } from "zod";
-export type ResourceType = "youtube" | "pdf" | "website";
+export type ResourceType = "youtube";
+
 export interface YouTubeResource {
   type: "youtube";
-  url: string;
-}
-export interface PdfResource {
-  type: "pdf";
-  path: string;
-}
-export interface WebsiteResource {
-  type: "website";
   url: string;
 }
 

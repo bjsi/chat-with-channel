@@ -1,4 +1,4 @@
-import { splitAtToken, splitTextChunks } from "modelfusion";
+import { embedMany, splitAtToken, splitTextChunks } from "modelfusion";
 import { ResourceChunk } from "../types";
 import path from "node:path";
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
@@ -7,15 +7,12 @@ import { parseSync } from "subtitle";
 import dotenv from "dotenv";
 import { embeddingModel } from "./embeddingModel";
 import { execSync } from "node:child_process";
-import { getVectorIndex } from "./myVectorIndex";
+import { vectorIndex } from "./vectorIndex";
+import { nanoid } from "nanoid";
 
 dotenv.config();
 
-export async function embedText<ChunkType extends ResourceChunk>(
-  chunks: ChunkType[],
-  allowSplit: boolean
-) {
-  const vectorIndex = await getVectorIndex();
+export async function embedText(chunks: ResourceChunk[], allowSplit: boolean) {
   if (allowSplit) {
     chunks = await splitTextChunks(
       splitAtToken({
@@ -25,11 +22,16 @@ export async function embedText<ChunkType extends ResourceChunk>(
       chunks
     );
   }
-
-  await vectorIndex.upsertIntoVectorIndex({
-    objects: chunks,
-    getValueToEmbed: (chunk) => chunk.text,
-  });
+  const chunkEmbeddings = await embedMany(
+    embeddingModel,
+    chunks.map((x) => x.text)
+  );
+  const objects = chunks.map((chunk, i) => ({
+    data: chunk,
+    vector: chunkEmbeddings[i],
+    id: nanoid(),
+  }));
+  await vectorIndex.upsertMany(objects);
 }
 
 async function main() {

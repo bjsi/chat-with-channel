@@ -12,6 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@modelfusion/sqlite-vss": "^0.1.0",
+    "nanoid": "^5.0.2",
     "node-webvtt": "^1.9.4",
     "pdfjs-dist": "^3.11.174",
     "subtitle": "^4.2.1"

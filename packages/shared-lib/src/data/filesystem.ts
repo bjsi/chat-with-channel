@@ -1,6 +1,6 @@
 import path from "path";
 
-export const vectorDataFile = path.join(__dirname, "vectorData.json");
+export const vectorDataFile = path.join(__dirname, "vectors.sqlite");
 
 export const allTranscriptsFolder = path.join(__dirname, "youtube/transcripts");
 export const allProcessdVideosFolder = path.join(

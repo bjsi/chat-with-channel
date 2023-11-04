@@ -8,10 +8,10 @@
     "packages/*"
   ],
   "scripts": {
-    "chat": "yarn workspace cli chat",
-    "search": "yarn workspace cli search",
+    "update": "yarn workspace shared-lib update",
     "server": "yarn workspace ui server",
-    "client": "yarn workspace ui client"
+    "client": "yarn workspace ui client",
+    "start": "yarn workspace ui start"
   },
   "dependencies": {
     "dotenv": "^16.3.1",

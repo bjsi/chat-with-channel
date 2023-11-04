@@ -9,7 +9,10 @@
       "path": "./packages/shared-lib"
     },
     {
-      "path": "./packages/cli"
+      "path": "./packages/ui"
+    },
+    {
+      "path": "./packages/ui/client"
     },
     {
       "path": "./packages/ui/server"

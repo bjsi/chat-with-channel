@@ -8,19 +8,20 @@ import {
 } from "modelfusion";
 import { embeddingModel } from "./embeddingModel";
 import * as dotenv from "dotenv";
-import { getVectorIndex } from "./myVectorIndex";
+import { vectorIndex } from "./vectorIndex";
 
-dotenv.config();
+dotenv.config({
+  path: "../../../../.env",
+});
 
 export async function search(args: { query: string; signal?: AbortSignal }) {
   const { query, signal } = args;
-  const vectorIndex = await getVectorIndex();
   const information = await retrieve(
     new VectorIndexRetriever({
-      vectorIndex: vectorIndex.vectorIndex,
+      vectorIndex,
       embeddingModel,
       maxResults: 5,
-      similarityThreshold: 0.75,
+      similarityThreshold: 0.7,
     }),
     query,
     {
@@ -34,7 +35,7 @@ export async function search(args: { query: string; signal?: AbortSignal }) {
 
 export async function searchAs(args: {
   question: string;
-  personality: "David Deutsch" | "Karl Popper";
+  personality: string;
   signal?: AbortSignal;
 }) {
   const { question: query, personality, signal } = args;
@@ -48,15 +49,10 @@ export async function searchAs(args: {
 
 export async function answerAs(args: {
   question: string;
-  personality: "David Deutsch" | "Karl Popper";
+  personality: string;
   signal?: AbortSignal;
 }) {
   const { question, personality, signal } = args;
-  const bios = {
-    "David Deutsch":
-      "author of The Fabric of Reality and The Beginning of Infinity.",
-    "Karl Popper": "author of The Logic of Scientific Discovery.",
-  };
   // hypothetical document embeddings:
   const hypotheticalAnswerStream = await streamText(
     // use cheap, fast model to generate hypothetical answer:
@@ -66,9 +62,7 @@ export async function answerAs(args: {
       maxCompletionTokens: 200,
     }),
     `
-Reply to the following question in the style of ${personality}, ${
-      bios[personality]
-    }
+${personality}
 Question: ${question}${question.endsWith("?") ? "" : "?"}`.trim(),
     {
       run: { abortSignal: signal },
@@ -87,7 +81,7 @@ Question: ${question}${question.endsWith("?") ? "" : "?"}`.trim(),
 
 export const chatAs = async (args: {
   messages: OpenAIChatMessage[];
-  personality: "David Deutsch" | "Karl Popper";
+  personality: string;
   signal?: AbortSignal;
 }) => {
   const { messages, personality, signal } = args;
@@ -104,7 +98,9 @@ export const chatAs = async (args: {
     [
       OpenAIChatMessage.system(
         // Instruct the model on how to answer:
-        `Answer the user's question in the style of ${personality} using only the provided information.\n` +
+        `Answer the user's question using only the provided information.\n` +
+          personality +
+          "\n" +
           // Provide some context:
           `Include footnotes with sources to the information that you are using. Use this kind of markdown footnote syntax: [^1]\n` +
           // To reduce hallucination, it is important to give the model an answer

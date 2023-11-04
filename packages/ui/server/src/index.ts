@@ -60,37 +60,8 @@ async function streamRequestHandler(
   }
 }
 
-app.post("/chat", async (request, response) => {
-  const { messages } = request.body;
-  const parsedData = chatMessagesSchema.safeParse(messages);
-  if (parsedData.success === false) {
-    return response.status(400).json({
-      error: `Could not parse content. Error: ${parsedData.error}`,
-    });
-  }
-  streamRequestHandler(request, response, (signal) =>
-    streamText(
-      new OpenAIChatModel({ model: "gpt-3.5-turbo", temperature: 0 }),
-      [
-        {
-          role: "system",
-          content:
-            "You are an AI chat bot. " +
-            "Follow the user's instructions carefully. Respond using markdown.",
-        },
-        ...request.body.messages,
-      ],
-      {
-        run: {
-          abortSignal: signal,
-        },
-      }
-    )
-  );
-});
-
 const chatAsSchema = z.object({
-  personality: z.union([z.literal("David Deutsch"), z.literal("Karl Popper")]),
+  personality: z.string(),
   messages: chatMessagesSchema,
 });
 
