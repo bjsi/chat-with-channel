@@ -1413,6 +1413,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chalk@npm:4.1.2, chalk@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "chalk@npm:4.1.2"
+  dependencies:
+    ansi-styles: ^4.1.0
+    supports-color: ^7.1.0
+  checksum: fe75c9d5c76a7a98d45495b91b2172fa3b7a09e0cc9370e5c8feb1c567b85c4288e2b3fded7cfdd7359ac28d6b3844feb8b82b8686842e93d23c827c417e83fc
+  languageName: node
+  linkType: hard
+
 "chalk@npm:^2.4.2":
   version: 2.4.2
   resolution: "chalk@npm:2.4.2"
@@ -1424,27 +1434,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^4.1.2":
-  version: 4.1.2
-  resolution: "chalk@npm:4.1.2"
-  dependencies:
-    ansi-styles: ^4.1.0
-    supports-color: ^7.1.0
-  checksum: fe75c9d5c76a7a98d45495b91b2172fa3b7a09e0cc9370e5c8feb1c567b85c4288e2b3fded7cfdd7359ac28d6b3844feb8b82b8686842e93d23c827c417e83fc
-  languageName: node
-  linkType: hard
-
-"chalk@npm:^5.3.0":
-  version: 5.3.0
-  resolution: "chalk@npm:5.3.0"
-  checksum: 623922e077b7d1e9dedaea6f8b9e9352921f8ae3afe739132e0e00c275971bdd331268183b2628cf4ab1727c45ea1f28d7e24ac23ce1db1eb653c414ca8a5a80
-  languageName: node
-  linkType: hard
-
 "chat-with-channel@workspace:.":
   version: 0.0.0-use.local
   resolution: "chat-with-channel@workspace:."
   dependencies:
+    "@modelfusion/sqlite-vss": ^0.1.0
     "@types/node": ^20.8.3
     dotenv: ^16.3.1
     modelfusion: ^0.41.1
@@ -3507,21 +3501,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nanoid@npm:3.0.0":
+  version: 3.0.0
+  resolution: "nanoid@npm:3.0.0"
+  checksum: 603abf8b34555b6ec206e14827ad1ec3ac5bec1ac4456823d2c45b1bb0d3d65a8d56254f8362eaa0b3d252d4c8f62f9a031a9fb61a167f27606ee24142132f4e
+  languageName: node
+  linkType: hard
+
 "nanoid@npm:3.3.6, nanoid@npm:^3.3.6":
   version: 3.3.6
   resolution: "nanoid@npm:3.3.6"
   bin:
     nanoid: bin/nanoid.cjs
   checksum: 7d0eda657002738aa5206107bd0580aead6c95c460ef1bdd0b1a87a9c7ae6277ac2e9b945306aaa5b32c6dcb7feaf462d0f552e7f8b5718abfc6ead5c94a71b3
-  languageName: node
-  linkType: hard
-
-"nanoid@npm:^5.0.2":
-  version: 5.0.2
-  resolution: "nanoid@npm:5.0.2"
-  bin:
-    nanoid: bin/nanoid.js
-  checksum: fa6908c2c6a7a9e91e02b98cb0b9b829454d390a63f83c1798f0c504d07b536d99cad3e975e5014b176534e67e234ff66bccd4610bf3ffb2cf0d6d932a73f3a8
   languageName: node
   linkType: hard
 
@@ -4958,11 +4950,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "shared-lib@workspace:packages/shared-lib"
   dependencies:
-    "@modelfusion/sqlite-vss": ^0.1.0
     "@types/cli-progress": ^3.11.4
-    chalk: ^5.3.0
+    chalk: 4.1.2
     cli-progress: ^3.12.0
-    nanoid: ^5.0.2
+    nanoid: 3.0.0
     node-webvtt: ^1.9.4
     pdfjs-dist: ^3.11.174
     subtitle: ^4.2.1
