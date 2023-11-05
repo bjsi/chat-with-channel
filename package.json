@@ -11,7 +11,8 @@
     "update": "yarn workspace shared-lib update",
     "server": "yarn workspace ui server",
     "client": "yarn workspace ui client",
-    "start": "yarn update && concurrently \"yarn client\" \"yarn server\""
+    "start": "yarn update && concurrently \"yarn client\" \"yarn server\"",
+    "postinstall": "git submodule update --init --recursive && cd packages/ui && yarn install"
   },
   "dependencies": {
     "dotenv": "^16.3.1",
