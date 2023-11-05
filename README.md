@@ -33,9 +33,10 @@ Welcome to Chat with Channel, an open source framework for creating YouTube chat
 2. Install [Yarn](https://yarnpkg.com/)
 3. Run `git clone https://github.com/bjsi/chat-with-channel.git` to clone the repository.
 4. Change directory into the project folder.
-5. Run `yarn install` to install dependencies.
-6. Create a file called `.env` in the root of the project folder.
-7. Add the following to the `.env` file:
+5. Run `git submodule update --init --recursive` to download the UI submodule.
+6. Run `yarn install` to install dependencies.
+7. Create a file called `.env` in the root of the project folder.
+8. Add the following to the `.env` file:
 
 ```sh
 OPENAI_API_KEY="<your OpenAI API key>"

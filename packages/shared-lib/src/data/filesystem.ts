@@ -19,7 +19,7 @@ const reservedRe = /^\.+$/;
 const windowsReservedRe = /^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$/i;
 const windowsTrailingRe = /[\. ]+$/;
 
-function sanitize(input: string) {
+export function sanitize(input: string) {
   if (typeof input !== "string") {
     throw new Error("Input must be string");
   }
@@ -37,13 +37,15 @@ function sanitize(input: string) {
  * Contains transcripts of the form: <channelName>/<videoId>.en.vtt
  */
 export const getTranscriptsFolderPath = (channelName: string) => {
-  return sanitize(path.join(allTranscriptsFolder, channelName));
+  return sanitize(path.join(allTranscriptsFolder, sanitize(channelName)));
 };
 
 export const getTranscriptsDownloadedVideosFilePath = (channelName: string) => {
-  return sanitize(path.join(allProcessdVideosFolder, `${channelName}.json`));
+  return path.join(allProcessdVideosFolder, `${sanitize(channelName)}.json`);
 };
 
 export const getEmbeddedVideosFilePath = (channelName: string) => {
-  return sanitize(path.join(embeddedVideosFolder, `${channelName}.json`));
+  return sanitize(
+    path.join(embeddedVideosFolder, `${sanitize(channelName)}.json`)
+  );
 };
