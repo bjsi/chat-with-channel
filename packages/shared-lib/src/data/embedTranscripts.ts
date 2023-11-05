@@ -1,8 +1,18 @@
 import { embedMany, splitAtToken, splitTextChunks } from "modelfusion";
 import { ResourceChunk } from "../types";
 import path from "node:path";
-import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
-import { allTranscriptsFolder, getEmbeddedVideosFilePath } from "./filesystem";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  writeFileSync,
+} from "node:fs";
+import {
+  allTranscriptsFolder,
+  embeddedVideosFolder,
+  getEmbeddedVideosFilePath,
+} from "./filesystem";
 import { parseSync } from "subtitle";
 import dotenv from "dotenv";
 import { embeddingModel } from "./embeddingModel";
@@ -60,6 +70,10 @@ export async function embedTranscripts() {
 
   const { channelID } = channelInfo;
 
+  if (!existsSync(embeddedVideosFolder)) {
+    mkdirSync(embeddedVideosFolder);
+  }
+
   // Reading already processed videos
   const processedFilePath = getEmbeddedVideosFilePath(channelID);
   let processedIds: string[] = [];
@@ -106,8 +120,13 @@ export async function embedTranscripts() {
           .replace(/\[.*?\]/g, ""),
         type: "youtube",
         url: `https://www.youtube.com/watch?v=${videoId}`,
-        start: typeof cue.data === "string" ? 0 : cue.data.start,
-        end: typeof cue.data === "string" ? 0 : cue.data.end,
+        start:
+          typeof cue.data === "string"
+            ? 0
+            : cue.data.start <= 10_000
+            ? 0
+            : Math.floor(cue.data.start / 1000),
+        end: typeof cue.data === "string" ? 0 : Math.ceil(cue.data.end / 1000),
       }))
       .filter((x) => !x.text.includes("<c>")) as ResourceChunk[];
 
