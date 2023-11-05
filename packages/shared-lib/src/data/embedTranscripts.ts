@@ -29,7 +29,6 @@ dotenv.config({
 });
 
 async function embedText(chunks: ResourceChunk[], allowSplit: boolean) {
-  console.log(chalk.green(`Embedding ${chunks.length} chunks...`));
   if (allowSplit) {
     chunks = await splitTextChunks(
       splitAtToken({
@@ -49,7 +48,6 @@ async function embedText(chunks: ResourceChunk[], allowSplit: boolean) {
     id: nanoid(),
   }));
   await vectorIndex.upsertMany(objects);
-  console.log(chalk.green(`Success!`));
 }
 
 export async function embedTranscripts() {
@@ -70,6 +68,9 @@ export async function embedTranscripts() {
 
   const { channelID } = channelInfo;
 
+  console.clear();
+  console.log(chalk.blue(`Embedding transcripts...`));
+
   if (!existsSync(embeddedVideosFolder)) {
     mkdirSync(embeddedVideosFolder);
   }
@@ -83,6 +84,13 @@ export async function embedTranscripts() {
   }
   const channelPath = path.join(allTranscriptsFolder, channelID);
   const videoFiles = readdirSync(channelPath).filter((f) => f.endsWith(".vtt"));
+  const unProcessedFiles = videoFiles.filter(
+    (f) => !processedIds.includes(path.basename(f, ".en.vtt"))
+  );
+  if (unProcessedFiles.length === 0) {
+    console.log(chalk.green(`No new transcripts to embed.`));
+    return;
+  }
 
   const multiBar = new MultiBar(
     {
@@ -93,18 +101,14 @@ export async function embedTranscripts() {
     Presets.shades_classic
   ).create(videoFiles.length, 0);
 
-  for (const file of videoFiles) {
+  for (const file of unProcessedFiles) {
     multiBar.increment();
-    console.log(chalk.magenta(`Processing ${file}...`));
     const videoId = path.basename(file, ".en.vtt");
     const videoTitleCommand = `yt-dlp --get-title -i "https://www.youtube.com/watch?v=${videoId}"`;
     const videoTitle = execSync(videoTitleCommand).toString().trim();
     const filePath = path.join(channelPath, file);
     const rawTranscript = readFileSync(filePath, "utf-8");
     const parsedTranscript = parseSync(rawTranscript);
-    if (processedIds.includes(videoId)) {
-      continue;
-    }
 
     // Generating chunks to be embedded
     const chunks = parsedTranscript
@@ -176,8 +180,6 @@ export async function embedTranscripts() {
     }
 
     // embeddings get saved here
-    console.log(`Embedding ${mergedChunks.length} transcript chunks...`);
-    console.log(JSON.stringify(mergedChunks[0]));
     await embedText(mergedChunks, true);
 
     // Saving processed IDs
@@ -185,6 +187,8 @@ export async function embedTranscripts() {
     writeFileSync(processedFilePath, JSON.stringify(processedIds));
   }
 
-  console.log(chalk.green(`Success!`));
+  multiBar.stop();
+  console.clear();
+  console.log(chalk.green(`Embedding Complete!`));
   return;
 }
