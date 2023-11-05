@@ -186,4 +186,5 @@ export async function embedTranscripts() {
   }
 
   console.log(chalk.green(`Success!`));
+  return;
 }

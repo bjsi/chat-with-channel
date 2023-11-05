@@ -3,6 +3,5 @@ node_modules
 dist
 vectorData.json
 .yarn
-data/youtube
-vectors.sqlite
-vectors.wal
+packages/shared-lib/src/data/youtube/
+vectors.sqlite*
