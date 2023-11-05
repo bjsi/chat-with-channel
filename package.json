@@ -11,7 +11,7 @@
     "update": "yarn workspace shared-lib update",
     "server": "yarn workspace ui server",
     "client": "yarn workspace ui client",
-    "start": "yarn workspace ui start",
+    "start": "concurrently \"yarn client\" \"yarn server\"",
     "run": "yarn update && yarn start"
   },
   "dependencies": {
@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.8.3",
+    "concurrently": "^8.2.2",
     "nodemon": "^3.0.1",
     "typescript": "^5.2.2"
   },

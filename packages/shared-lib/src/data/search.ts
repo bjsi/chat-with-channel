@@ -21,7 +21,7 @@ export async function search(args: { query: string; signal?: AbortSignal }) {
       vectorIndex,
       embeddingModel,
       maxResults: 5,
-      similarityThreshold: 0.7,
+      similarityThreshold: 0.6,
     }),
     query,
     {
