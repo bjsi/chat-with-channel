@@ -23,25 +23,34 @@ Welcome to Chat with Channel, an open source framework for creating YouTube chat
 
 ### 📽️ Tutorial
 
-- Requires minimal coding experience. All you need to do is create a `.env` file with your OpenAI API key and run a few commands.
-- The program will run on your computer and includes a chat UI similar to the ChatGPT UI.
+- Requires minimal coding experience!
+- All you need to do is provide some settings and run some simple commands.
+- The program will run on your computer and includes a chat UI similar to ChatGPT.
 
-### Prerequisites
+### Steps
 
-- You must have [Node.js](https://nodejs.org/en/) installed.
-- You must have [Yarn](https://yarnpkg.com/) installed.
-- Run `yarn install` to install dependencies.
-- Create a `.env` file in the `packages/ui/server` directory with an `OPENAI_API_KEY` variable set to your OpenAI API key.
+1. Install [Node.js](https://nodejs.org/en/)
+2. Install [Yarn](https://yarnpkg.com/)
+3. Run `git clone https://github.com/bjsi/chat-with-channel.git` to clone the repository.
+4. Change directory into the project folder.
+5. Run `yarn install` to install dependencies.
+6. Create a file called `.env` in the root of the project folder.
+7. Add the following to the `.env` file:
 
-### UI
+```sh
+OPENAI_API_KEY="<your OpenAI API key>"
+YOUTUBE_CHANNEL_URL="https://www.youtube.com/channel/<channel ID>"
+ANSWER_AS="Answer as <name of person and description of persona>"
+YOUTUBE_CHANNEL_NAME="<name of YouTube channel>"
+```
 
-- `yarn server` to start the server.
-- `yarn client` to start the frontend and open the chat UI in your browser.
+Example:
 
-### CLI
+```sh
+OPENAI_API_KEY="sk-1234567890"
+YOUTUBE_CHANNEL_URL="https://www.youtube.com/@DavidDeutschPhysicist"
+ANSWER_AS="Answer as David Deutsch, author of The Beginning of Infinity and The Fabric of Reality."
+YOUTUBE_CHANNEL_NAME="David Deutsch"
+```
 
-- `yarn chat` to start a new chat session.
-- `yarn search` to start a text embedding search session (useful for debugging).
-- `yarn update` to download transcripts for the latest videos in the tracked resources file (see `sources.json`).
-  - You must install [`yt-dlp`](https://github.com/yt-dlp/yt-dlp) to download transcripts for new videos.
-- `yarn embed` to create embeddings from the latest transcripts.
+8. Run `yarn start` to start the program. It will download the latest transcripts from the YouTube channel and start the chatbot.

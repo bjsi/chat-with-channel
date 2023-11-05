@@ -11,8 +11,7 @@
     "update": "yarn workspace shared-lib update",
     "server": "yarn workspace ui server",
     "client": "yarn workspace ui client",
-    "start": "concurrently \"yarn client\" \"yarn server\"",
-    "run": "yarn update && yarn start"
+    "start": "yarn update && concurrently \"yarn client\" \"yarn server\""
   },
   "dependencies": {
     "dotenv": "^16.3.1",

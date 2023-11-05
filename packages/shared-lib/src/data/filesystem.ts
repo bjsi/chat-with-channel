@@ -13,14 +13,37 @@ export const embeddedVideosFolder = path.join(
   "youtube/embeddedVideos"
 );
 
+const illegalRe = /[\/\?<>\\:\*\|"]/g;
+const controlRe = /[\x00-\x1f\x80-\x9f]/g;
+const reservedRe = /^\.+$/;
+const windowsReservedRe = /^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$/i;
+const windowsTrailingRe = /[\. ]+$/;
+
+function sanitize(input: string) {
+  if (typeof input !== "string") {
+    throw new Error("Input must be string");
+  }
+  const sanitized = input
+    .replace(/ /g, "_")
+    .replace(illegalRe, "")
+    .replace(controlRe, "")
+    .replace(reservedRe, "")
+    .replace(windowsReservedRe, "")
+    .replace(windowsTrailingRe, "");
+  return sanitized;
+}
+
 /**
  * Contains transcripts of the form: <channelName>/<videoId>.en.vtt
  */
-export const getTranscriptsFolderPath = (channelName: string) =>
-  path.join(allTranscriptsFolder, channelName);
+export const getTranscriptsFolderPath = (channelName: string) => {
+  return sanitize(path.join(allTranscriptsFolder, channelName));
+};
 
-export const getTranscriptsDownloadedVideosFilePath = (channelName: string) =>
-  path.join(allProcessdVideosFolder, `${channelName}.json`);
+export const getTranscriptsDownloadedVideosFilePath = (channelName: string) => {
+  return sanitize(path.join(allProcessdVideosFolder, `${channelName}.json`));
+};
 
-export const getEmbeddedVideosFilePath = (channelName: string) =>
-  path.join(embeddedVideosFolder, `${channelName}.json`);
+export const getEmbeddedVideosFilePath = (channelName: string) => {
+  return sanitize(path.join(embeddedVideosFolder, `${channelName}.json`));
+};
