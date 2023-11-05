@@ -10,7 +10,7 @@
 
 ## 🚀 Overview
 
-Welcome to Chat with Channel, an open source framework for creating YouTube chatbots with GPT. I've been using it to chat with AI versions of [Brett Hall](https://www.youtube.com/@bretthall9080) who makes videos and podcasts about the works of Karl Popper and David Deutsch, and it's been a lot of fun. If you are curious you can check that out [here](). I hope you find it useful too!
+Welcome to Chat with Channel, an open source framework for creating YouTube chatbots with GPT. I've been using it to chat with AI versions of [Brett Hall](https://www.youtube.com/@bretthall9080) who makes videos and podcasts about the works of Karl Popper and David Deutsch, and it's been a lot of fun. If you are curious you can check that out [here](https://github.com/bjsi/ai-popper). I hope you find it useful too!
 
 ### ✨ Features
 
