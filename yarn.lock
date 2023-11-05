@@ -745,6 +745,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/cli-progress@npm:^3.11.4":
+  version: 3.11.4
+  resolution: "@types/cli-progress@npm:3.11.4"
+  dependencies:
+    "@types/node": "*"
+  checksum: f70c38878bd9b6bbb693892d0a61bab0282df896b60d4af0d7fbac8a0c6c007cdc337bea380920e6aa23f35885a7b4945c9bdfb2e14a6039394c3d71b5187e65
+  languageName: node
+  linkType: hard
+
 "@types/connect@npm:*":
   version: 3.4.36
   resolution: "@types/connect@npm:3.4.36"
@@ -1425,6 +1434,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chalk@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "chalk@npm:5.3.0"
+  checksum: 623922e077b7d1e9dedaea6f8b9e9352921f8ae3afe739132e0e00c275971bdd331268183b2628cf4ab1727c45ea1f28d7e24ac23ce1db1eb653c414ca8a5a80
+  languageName: node
+  linkType: hard
+
 "chat-with-channel@workspace:.":
   version: 0.0.0-use.local
   resolution: "chat-with-channel@workspace:."
@@ -1484,6 +1500,15 @@ __metadata:
   version: 2.2.0
   resolution: "clean-stack@npm:2.2.0"
   checksum: 2ac8cd2b2f5ec986a3c743935ec85b07bc174d5421a5efc8017e1f146a1cf5f781ae962618f416352103b32c9cd7e203276e8c28241bbe946160cab16149fb68
+  languageName: node
+  linkType: hard
+
+"cli-progress@npm:^3.12.0":
+  version: 3.12.0
+  resolution: "cli-progress@npm:3.12.0"
+  dependencies:
+    string-width: ^4.2.3
+  checksum: e8390dc3cdf3c72ecfda0a1e8997bfed63a0d837f97366bbce0ca2ff1b452da386caed007b389f0fe972625037b6c8e7ab087c69d6184cc4dfc8595c4c1d3e6e
   languageName: node
   linkType: hard
 
@@ -4934,6 +4959,9 @@ __metadata:
   resolution: "shared-lib@workspace:packages/shared-lib"
   dependencies:
     "@modelfusion/sqlite-vss": ^0.1.0
+    "@types/cli-progress": ^3.11.4
+    chalk: ^5.3.0
+    cli-progress: ^3.12.0
     nanoid: ^5.0.2
     node-webvtt: ^1.9.4
     pdfjs-dist: ^3.11.174

@@ -40,7 +40,7 @@ export async function searchAs(args: {
 }) {
   const { question: query, personality, signal } = args;
   console.log("Searching for: " + query);
-  console.log("As: " + personality);
+  console.log(personality);
   const hypotheticalAnswer = await answerAs({
     ...args,
   }); // search for text chunks that are similar to the hypothetical answer:

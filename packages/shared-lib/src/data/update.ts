@@ -1,32 +1,29 @@
 import { readFileSync, existsSync, mkdirSync, writeFileSync } from "fs";
 import { execSync } from "child_process";
-import { z } from "zod";
 import {
   allProcessdVideosFolder,
   allTranscriptsFolder,
   getTranscriptsDownloadedVideosFilePath,
   getTranscriptsFolderPath,
-  sourcesFile,
 } from "./filesystem";
+import chalk from "chalk";
+import cliProgress from "cli-progress";
+import dotenv from "dotenv";
 
-const sourceDataSchema = z.object({
-  sources: z
-    .object({
-      name: z.string(),
-      source: z.string().url(),
-    })
-    .array(),
+dotenv.config({
+  path: "../../../../.env",
 });
 
 async function main() {
-  const data = readFileSync(sourcesFile, "utf-8");
-  const maybeDataSources = sourceDataSchema.safeParse(JSON.parse(data));
-  if (!maybeDataSources.success) {
-    console.error(maybeDataSources.error);
+  const channelId = process.env.YOUTUBE_CHANNEL_ID;
+  if (!channelId) {
+    console.log(
+      chalk.red(
+        "YOUTUBE_CHANNEL_ID environment variable not set. Create a .env file in the root of the project and set the YOUTUBE_CHANNEL_ID variable."
+      )
+    );
     return;
   }
-  const dataSources = maybeDataSources.data;
-
   if (!existsSync(allTranscriptsFolder)) {
     mkdirSync(allTranscriptsFolder);
   }
@@ -35,55 +32,52 @@ async function main() {
     mkdirSync(allProcessdVideosFolder);
   }
 
-  dataSources.sources.forEach((source) => {
-    console.log(`Processing ${source.name}...`);
-    const channelName = source.name.replace(/\s+/g, "_");
-    const channelURL = source.source;
+  const transcriptDir = getTranscriptsFolderPath(channelId);
+  const processedFile = getTranscriptsDownloadedVideosFilePath(channelId);
 
-    const transcriptDir = getTranscriptsFolderPath(channelName);
-    const processedFile = getTranscriptsDownloadedVideosFilePath(channelName);
+  if (!existsSync(transcriptDir)) {
+    mkdirSync(transcriptDir);
+  }
 
-    if (!existsSync(transcriptDir)) {
-      mkdirSync(transcriptDir);
-    }
+  let processedIds: string[] = [];
+  if (existsSync(processedFile)) {
+    const rawData = readFileSync(processedFile, "utf-8");
+    processedIds = JSON.parse(rawData);
+  }
 
-    let processedIds: string[] = [];
-    if (existsSync(processedFile)) {
-      const rawData = readFileSync(processedFile, "utf-8");
-      processedIds = JSON.parse(rawData);
-    }
+  // Fetch all video IDs from the channel
+  console.log(chalk.blue(`Fetching all video IDs (can be slow)...`));
+  const videoIdCommand = `yt-dlp --get-id -i "${channelId}"`;
+  const videoIdsRaw = execSync(videoIdCommand).toString().trim();
+  const videoIds = videoIdsRaw.split("\n");
+  console.log(chalk.green(`Found ${videoIds.length} total video IDs`));
 
-    // Fetch all video IDs from the channel
-    console.log(`Fetching all video IDs for ${channelName} (can be slow)...`);
-    const videoIdCommand = `yt-dlp --get-id -i "${channelURL}"`;
-    const videoIdsRaw = execSync(videoIdCommand).toString().trim();
-    const videoIds = videoIdsRaw.split("\n");
-    console.log(`Found ${videoIds.length} total video IDs for ${channelName}.`);
+  // Filter out already processed IDs
+  const newVideoIds = videoIds.filter((id) => !processedIds.includes(id));
+  console.log(`Found ${newVideoIds.length} new video IDs.`);
 
-    // Filter out already processed IDs
-    const newVideoIds = videoIds.filter((id) => !processedIds.includes(id));
+  const progressBar = new cliProgress.SingleBar(
+    {},
+    cliProgress.Presets.shades_classic
+  );
+  progressBar.start(newVideoIds.length, 0);
+
+  newVideoIds.forEach((id, idx) => {
+    progressBar.increment();
+    const command = `yt-dlp --write-sub --write-auto-sub --sub-lang en --sub-format vtt --skip-download -o "${transcriptDir}/${id}.%(ext)s" "https://www.youtube.com/watch?v=${id}"`;
     console.log(
-      `Found ${newVideoIds.length} new video IDs for ${channelName}.`
+      `Downloading transcript for video ${idx + 1} of ${newVideoIds.length}...`
     );
 
-    newVideoIds.forEach((id, idx) => {
-      const command = `yt-dlp --write-sub --write-auto-sub --sub-lang en --sub-format vtt --skip-download -o "${transcriptDir}/${id}.%(ext)s" "https://www.youtube.com/watch?v=${id}"`;
-      console.log(
-        `Downloading transcript for video ${idx + 1} of ${
-          newVideoIds.length
-        }...`
+    try {
+      execSync(command);
+      processedIds.push(id);
+      writeFileSync(processedFile, JSON.stringify(processedIds));
+    } catch (error) {
+      console.error(
+        chalk.red(`Failed to download transcript for video ID ${id}: ${error}`)
       );
-
-      try {
-        execSync(command);
-        processedIds.push(id);
-        writeFileSync(processedFile, JSON.stringify(processedIds));
-      } catch (error) {
-        console.error(
-          `Failed to download transcript for video ID ${id}: ${error}`
-        );
-      }
-    });
+    }
   });
 }
 

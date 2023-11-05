@@ -9,10 +9,13 @@ import { embeddingModel } from "./embeddingModel";
 import { execSync } from "node:child_process";
 import { vectorIndex } from "./vectorIndex";
 import { nanoid } from "nanoid";
+import chalk from "chalk";
+import { MultiBar, Presets } from "cli-progress";
 
 dotenv.config();
 
-export async function embedText(chunks: ResourceChunk[], allowSplit: boolean) {
+async function embedText(chunks: ResourceChunk[], allowSplit: boolean) {
+  console.log(chalk.green(`Embedding ${chunks.length} chunks...`));
   if (allowSplit) {
     chunks = await splitTextChunks(
       splitAtToken({
@@ -32,6 +35,7 @@ export async function embedText(chunks: ResourceChunk[], allowSplit: boolean) {
     id: nanoid(),
   }));
   await vectorIndex.upsertMany(objects);
+  console.log(chalk.green(`Success!`));
 }
 
 async function main() {
@@ -39,7 +43,8 @@ async function main() {
   const channelFolders = readdirSync(allTranscriptsFolder);
 
   for (const channelFolder of channelFolders) {
-    console.log(`Processing ${channelFolder}...`);
+    console.log(chalk.blue(`Processing ${channelFolder}...`));
+
     // Reading already processed videos
     const processedFilePath = getEmbeddedVideosFilePath(channelFolder);
     let processedIds: string[] = [];
@@ -52,8 +57,17 @@ async function main() {
       f.endsWith(".vtt")
     );
 
+    const multiBar = new MultiBar(
+      {
+        clearOnComplete: false,
+        hideCursor: true,
+        format: "{bar} | {percentage}% || {value}/{total} videos",
+      },
+      Presets.shades_classic
+    ).create(videoFiles.length, 0);
     for (const file of videoFiles) {
-      console.log(`Processing ${file}...`);
+      multiBar.increment();
+      console.log(chalk.magenta(`Processing ${file}...`));
       const videoId = path.basename(file, ".en.vtt");
       const videoTitleCommand = `yt-dlp --get-title -i "https://www.youtube.com/watch?v=${videoId}"`;
       const videoTitle = execSync(videoTitleCommand).toString().trim();
@@ -140,4 +154,5 @@ async function main() {
     }
   }
 }
+
 main();
