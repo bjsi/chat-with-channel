@@ -37,7 +37,7 @@ export function sanitize(input: string) {
  * Contains transcripts of the form: <channelName>/<videoId>.en.vtt
  */
 export const getTranscriptsFolderPath = (channelName: string) => {
-  return sanitize(path.join(allTranscriptsFolder, sanitize(channelName)));
+  return path.join(allTranscriptsFolder, sanitize(channelName));
 };
 
 export const getTranscriptsDownloadedVideosFilePath = (channelName: string) => {
@@ -45,7 +45,5 @@ export const getTranscriptsDownloadedVideosFilePath = (channelName: string) => {
 };
 
 export const getEmbeddedVideosFilePath = (channelName: string) => {
-  return sanitize(
-    path.join(embeddedVideosFolder, `${sanitize(channelName)}.json`)
-  );
+  return path.join(embeddedVideosFolder, `${sanitize(channelName)}.json`);
 };
