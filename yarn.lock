@@ -604,15 +604,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@modelfusion/sqlite-vss@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@modelfusion/sqlite-vss@npm:0.1.0"
+"@modelfusion/sqlite-vss@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@modelfusion/sqlite-vss@npm:0.1.1"
   dependencies:
     better-sqlite3: ^9.0.0
     sqlite-vss: ^0.1.2
   peerDependencies:
     modelfusion: ^0.45.0
-  checksum: ccf103b906d459b6dd71a0b0a15118634062eba1211e2c956f73d61fb8f679aa9f872e074d06a8c844e4727d15a6ac80e4e8b6177f932450f9ef437a86f4e610
+  checksum: b42266952143e1397754dab52c8258209dcac7f1b317032de40d02db5ba275dc6c9721b372e2bf97abaf6ceb337e967d6b4b9266efd1b50fe1c296780e9544d6
   languageName: node
   linkType: hard
 
@@ -1438,7 +1438,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "chat-with-channel@workspace:."
   dependencies:
-    "@modelfusion/sqlite-vss": ^0.1.0
     "@types/node": ^20.8.3
     dotenv: ^16.3.1
     modelfusion: ^0.41.1
@@ -4950,6 +4949,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "shared-lib@workspace:packages/shared-lib"
   dependencies:
+    "@modelfusion/sqlite-vss": ^0.1.1
     "@types/cli-progress": ^3.11.4
     chalk: 4.1.2
     cli-progress: ^3.12.0
