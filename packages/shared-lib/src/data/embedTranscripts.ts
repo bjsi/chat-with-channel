@@ -20,7 +20,7 @@ import { execSync } from "node:child_process";
 import { vectorIndex } from "./vectorIndex";
 import { nanoid } from "nanoid";
 import chalk from "chalk";
-import { MultiBar, Presets } from "cli-progress";
+import { MultiBar, Presets, SingleBar } from "cli-progress";
 import { getChannelInfo } from "./getChannel";
 
 const envFile = path.resolve("../../.env");
@@ -92,17 +92,16 @@ export async function embedTranscripts() {
     return;
   }
 
-  const multiBar = new MultiBar(
+  const bar = new SingleBar(
     {
-      clearOnComplete: false,
-      hideCursor: true,
-      format: "{bar} | {percentage}% || {value}/{total} videos",
+      clearOnComplete: true,
     },
     Presets.shades_classic
-  ).create(videoFiles.length, 0);
+  );
+  bar.start(unProcessedFiles.length, 0);
 
   for (const file of unProcessedFiles) {
-    multiBar.increment();
+    bar.increment();
     const videoId = path.basename(file, ".en.vtt");
     const videoTitleCommand = `yt-dlp --get-title -i "https://www.youtube.com/watch?v=${videoId}"`;
     const videoTitle = execSync(videoTitleCommand).toString().trim();
@@ -187,7 +186,7 @@ export async function embedTranscripts() {
     writeFileSync(processedFilePath, JSON.stringify(processedIds));
   }
 
-  multiBar.stop();
+  bar.stop();
   console.clear();
   console.log(chalk.green(`Embedding Complete!`));
   return;

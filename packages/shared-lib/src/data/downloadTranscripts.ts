@@ -46,6 +46,7 @@ export async function downloadTranscripts() {
   }
 
   // Fetch all video IDs from the channel
+  console.clear();
   console.log(chalk.blue(`Fetching all video IDs (can be slow)...`));
   const videoIdCommand = `yt-dlp --get-id -i "${channelURL}"`;
   const videoIdsRaw = execSync(videoIdCommand).toString().trim();
