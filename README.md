@@ -31,12 +31,13 @@ Welcome to Chat with Channel, an open source framework for creating YouTube chat
 
 1. Install [Node.js](https://nodejs.org/en/)
 2. Install [Yarn](https://yarnpkg.com/)
-3. Run `git clone https://github.com/bjsi/chat-with-channel.git` to clone the repository.
-4. Change directory into the project folder.
-5. Run `git submodule update --init --recursive` to download the UI submodule.
-6. Run `yarn install` to install dependencies.
-7. Create a file called `.env` in the root of the project folder.
-8. Add the following to the `.env` file:
+3. Install [yt-dlp](https://github.com/yt-dlp/yt-dlp)
+4. Run `git clone https://github.com/bjsi/chat-with-channel.git` to clone the repository.
+5. Change directory into the project folder.
+6. Run `git submodule update --init --recursive` to download the UI submodule.
+7. Run `yarn install` to install dependencies.
+8. Create a file called `.env` in the root of the project folder.
+9. Add the following to the `.env` file:
 
 ```sh
 OPENAI_API_KEY="<your OpenAI API key>"
